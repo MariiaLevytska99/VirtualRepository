@@ -15,7 +15,8 @@ class SessionResource(Resource):
                     'id': session.session_id,
                     'start': session.start,
                     'end': session.end,
-                    'score': session.score
+                    'score': session.score,
+                    'completed': session.completed
                 }
             )
         return {'session': result}
