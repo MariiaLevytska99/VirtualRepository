@@ -19,7 +19,7 @@ class AccountsResource(Resource):
                 'username': account.username,
                 'email': account.email
             })
-        return {'accounts': result}
+        return {'content': result}
 
     def delete(self, user_id):
         #payload = request.get_json(force=True)
@@ -36,7 +36,7 @@ class AccountsResource(Resource):
                 'username': account.username,
                 'email': account.email
             })
-        return {'accounts': result}, 200
+        return {'content': result}, 200
 
 
 class AccountDeleteById(Resource):
@@ -55,4 +55,4 @@ class AccountDeleteById(Resource):
                 'username': account.username,
                 'email': account.email
             })
-        return {'accounts': result}, 200
+        return {'content': result}, 200

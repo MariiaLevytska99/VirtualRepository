@@ -14,8 +14,19 @@ class RequirementResource(Resource):
                 {
                     'id': requirement.requirement_id,
                     'text': requirement.requirement_text,
-                    'type_id': requirement.type_id
+                    'typeId': requirement.type_id
                 }
             )
-        return {'requirements':result}
+        return {'content':result}
+
+
+    def put(self):
+        payload = request.get_json(force=True)
+        new_requirement = Requirement()
+        new_requirement.requirement_text = payload.get('text')
+        new_requirement.type_id = payload.get('typeId')
+        db.session.add(new_requirement)
+        db.session.commit()
+
+
 

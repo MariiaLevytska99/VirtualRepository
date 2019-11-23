@@ -13,9 +13,9 @@ class SessionTaskResource(Resource):
             result.append(
                 {
                     'id': task.session_task_id,
-                    'session_id': task.session_id,
-                    'requirement_id': task.requirement_id,
-                    'answer_id': task.requirement_type_answe
+                    'sessionId': task.session_id,
+                    'requirementId': task.requirement_id,
+                    'answerId': task.requirement_type_answe
                 }
             )
-        return {'session_tasks': result}
+        return {'content': result}

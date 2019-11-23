@@ -12,8 +12,8 @@ class AccounSessionsResource(Resource):
         for account_session in accounts_sessions:
              result.append({
                  'id': account_session.account_session_id,
-                 'session_id': account_session.session_id,
-                 'account_id': account_session.account_id,
+                 'sessionId': account_session.session_id,
+                 'accountId': account_session.account_id,
         })
 
-        return {'account_session': result}
+        return {'content': result}

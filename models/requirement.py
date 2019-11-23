@@ -15,6 +15,6 @@ class Requirement(db.Model):
         self.type_id = type_id
 
     def __repr__(self):
-        return '<Requirememt % r Type %r>' % (self.requirement_text, self.type_id)
+        return '<Requirement %r Type %r>' % (self.requirement_text, self.type_id)
 
 

@@ -19,4 +19,4 @@ class SessionResource(Resource):
                     'completed': session.completed
                 }
             )
-        return {'session': result}
+        return {'content': result}

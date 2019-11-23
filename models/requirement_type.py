@@ -10,4 +10,4 @@ class RequirementType(db.Model):
         self.type_name = type_name
 
     def __repr__(self):
-        return '<Requiremnt type %r>' % (self.type_name)
+        return '<Requirement type %r>' % (self.type_name)
