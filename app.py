@@ -26,7 +26,7 @@ from resources.specification_requirements import SpecificationAddRequirementReso
 from resources.specification_requirements import SpecificationDeleteRequirementResource
 from resources.specification_requirements import SpecificationUpdateRequirementResource
 from resources.account_specifications import AccountSpecificationResource
-
+from resources.tasks import TaskResource
 #specification/id/req
 api.add_resource(AccountsResource, '/api/accounts')
 api.add_resource(RequirementTypeResource, '/api/requirement/type')
@@ -35,6 +35,7 @@ api.add_resource(SpecificationResource, '/api/specifications')
 api.add_resource(AccountSpecificationResource, '/api/account/<id>/specification')
 api.add_resource(SpecificationRequirementResource, '/api/specification/<id>/requirements')
 api.add_resource(SessionResource, '/api/sessions')
+api.add_resource(TaskResource, '/api/session/<id>/task')
 api.add_resource(AccounSessionsResource, '/api/account_session')
 api.add_resource(SessionTaskResource, '/api/session_tasks')
 api.add_resource(SpecificationDeleteById, '/api/specification/<id>')
