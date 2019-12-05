@@ -8,7 +8,7 @@ class AccountSession(db.Model):
     session_id = db.Column(db.Integer, db.ForeignKey('session.session_id', name='fk_session_account_session'), nullable=True)
 
     accounts = db.relationship("Account")
-    sessionss = db.relationship("Session")
+    sessions = db.relationship("Session")
 
     def __index__(self, session_id, account_id):
         self.session_id = session_id
