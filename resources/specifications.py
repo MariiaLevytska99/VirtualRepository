@@ -3,6 +3,7 @@ from flask import request
 from db import db
 
 from models.specification import Specification
+from models.account_specification import AccountSpecification
 
 class SpecificationResource(Resource):
 
@@ -17,6 +18,18 @@ class SpecificationResource(Resource):
                     'description': specification.specification_description
                 }
             )
+        return {'content': result}
+
+    def get(self, id):
+        specification = Specification.query().filter(Specification.specification_id == id).first()
+        attempts = AccountSpecification.query().filter(AccountSpecification.specification_id == id).first().attempts
+        result = {
+                'id': specification.specification_id,
+                'name': specification.specification_name,
+                'description': specification.specification_description,
+                'attempts': attempts,
+                'score': 0
+            }
         return {'content': result}
 
 

@@ -19,3 +19,13 @@ class SessionTaskResource(Resource):
                 }
             )
         return {'content': result}
+
+    def put(self):
+        task = SessionTask()
+        payload = request.get_json(force=True)
+        task.session_id = payload.get('session_id')
+        task.requirement_id = payload.get('requirement_id')
+        task.requirement_type_answer = payload.get('answer')
+
+        db.session.add(task)
+        db.session.commit()

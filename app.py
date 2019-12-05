@@ -27,7 +27,7 @@ from resources.specification_requirements import SpecificationDeleteRequirementR
 from resources.specification_requirements import SpecificationUpdateRequirementResource
 from resources.account_specifications import AccountSpecificationResource
 from resources.tasks import TaskResource
-#specification/id/req
+
 api.add_resource(AccountsResource, '/api/accounts')
 api.add_resource(RequirementTypeResource, '/api/requirement/type')
 api.add_resource(RequirementResource, '/api/requirements')

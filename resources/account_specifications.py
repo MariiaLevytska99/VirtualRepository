@@ -3,6 +3,7 @@ from flask import request
 from db import db
 
 from models.account_specification import AccountSpecification
+from models.specification import Specification
 
 class AccountSpecificationResource(Resource):
 
@@ -19,3 +20,22 @@ class AccountSpecificationResource(Resource):
                 }
             )
         return {'content': result}
+
+    def putAttempts(self,specification_id, account_id):
+        account_specification_new = AccountSpecification()
+        account_specification_new.attempts = 3
+        account_specification_new.specification_id = specification_id
+        account_specification_new.account_id = account_id
+        db.session.add(account_specification_new)
+        db.session.commit()
+
+    def put(self, accountId):
+
+        specifications = Specification.query.all()
+        for specification in specifications:
+            self.putAttempts(specification.specification_id, accountId)
+
+
+
+
+

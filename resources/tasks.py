@@ -24,6 +24,6 @@ class TaskResource(Resource):
                     'text': requirement.requirement.requirement_text
                 }
             )
-            result = {'id' : id, 'requirements': result_req}
+            result = {'id': id, 'requirements': result_req}
 
         return {'content': result}

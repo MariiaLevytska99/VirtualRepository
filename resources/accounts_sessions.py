@@ -17,3 +17,4 @@ class AccounSessionsResource(Resource):
         })
 
         return {'content': result}
+
