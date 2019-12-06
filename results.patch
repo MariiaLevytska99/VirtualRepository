@@ -1,0 +1,58 @@
+diff --git a/app.py b/app.py
+index 695269b..d689224 100644
+--- a/app.py
++++ b/app.py
+@@ -19,6 +19,7 @@ from resources.specifications import SpecificationResource
+ from resources.specification_requirements import SpecificationRequirementResource
+ from resources.sessions import SessionResource
+ from resources.sessions import SessionUpdateScoreResource
++from resources.sessions import SessionGetResultResource
+ from resources.accounts_sessions import AccountSessionsResource
+ from resources.session_tasks import SessionTaskResource
+ from resources.specifications import SpecificationDeleteById
+@@ -49,6 +50,7 @@ api.add_resource(BestScoreResource, '/api/accounts/<accountId>/bestscore/<specif
+ api.add_resource(SessionUpdateScoreResource, '/api/sessions/score/<sessionId>')
+ api.add_resource(SpecificationDetails, '/api/specifications/<specificationId>/account/<accountId>')
+ api.add_resource(AccountSessionsResource, '/api/session/specifications/<specificationId>/account/<accountId>')
++api.add_resource(SessionGetResultResource, '/api/session/<id>/result')
+ # somehow make it secure using /current and id from token
+ if __name__ == '__main__':
+     app.run(debug=True, port=5000)
+diff --git a/resources/sessions.py b/resources/sessions.py
+index fefb223..a982677 100644
+--- a/resources/sessions.py
++++ b/resources/sessions.py
+@@ -74,3 +74,33 @@ class SessionBridgeResource(Resource):
+         db.session.add(new_session)
+         db.session.commit()
+         return {'content': new_session.session_id}
++
++class SessionGetResultResource(Resource):
++
++    def get(self, sessionId):
++        payload = request.get_json(force=True)
++        session = Session.query.filter(Session.session_id == sessionId).first()
++        session_tasks = SessionTask.query.filter(SessionTask.session_id == sessionId)
++        n = 0
++        m = 0
++        for session_task in session_tasks:
++            m += 1
++            requirement = Requirement.query.filter(Requirement.requirement_id == session_task.requirement_id)
++            if requirement.type_id == session_task.requirement_type_answer:
++                n += 1
++            elif session_task.requirement_type_answer is not None:
++                m += 2
++
++        passingPoints = (int)(m * 0.75)
++
++        result = []
++        result.append(
++                {
++                    'score': n,
++                    'passingPoints': passingPoints,
++                    'passed': n >= passingPoints,
++                    'percentage': session.score
++                }
++        )
++        return {'content': result}
++

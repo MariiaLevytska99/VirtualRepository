@@ -10,7 +10,7 @@ from models.session_task import SessionTask
 from models.requirement import Requirement
 from models.specification_requirement import SpecificationRequirement
 from resources.account_specifications import AttemptResource
-
+from decimal import Decimal
 
 class SessionResource(Resource):
 
@@ -74,3 +74,36 @@ class SessionBridgeResource(Resource):
         db.session.add(new_session)
         db.session.commit()
         return {'content': new_session.session_id}
+
+class SessionGetResultResource(Resource):
+
+    def get(self, sessionId):
+        session = Session.query.filter(Session.session_id == sessionId).first()
+        session_tasks = SessionTask.query.filter(SessionTask.session_id == sessionId).all()
+        n = 0
+        m = 0
+        for session_task in session_tasks:
+            print('1', session_task)
+            m += 1
+            requirement = Requirement.query.filter(Requirement.requirement_id == session_task.requirement_id).first()
+            if requirement.type_id == session_task.requirement_type_answer:
+                print('2')
+                n += 1
+            elif session_task.requirement_type_answer is not None:
+                print('3')
+                m += 2
+        passingPoints = (int)(m * 0.75)
+
+        session.score = n
+        session.completed = (n >= passingPoints)
+        session.end = datetime.datetime.utcnow()
+        db.session.commit()
+
+        result = {
+            'score': float(n),
+            'passed': n >= passingPoints,
+            'passingScore': float(passingPoints),
+            'percentage': float(session.score)
+        }
+
+        return {'content': result}
