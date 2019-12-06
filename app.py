@@ -39,7 +39,7 @@ api.add_resource(AccountSpecificationResource, '/api/account/<id>/specification'
 api.add_resource(SpecificationRequirementResource, '/api/specification/<id>/requirements')
 api.add_resource(SessionResource, '/api/sessions')
 api.add_resource(TaskResource, '/api/session/<id>/task')
-api.add_resource(SessionTaskResource, '/api/session_tasks')
+api.add_resource(SessionTaskResource, '/api/session/<sessionId>')
 api.add_resource(SpecificationDeleteById, '/api/specification/<id>')
 api.add_resource(SpecificationUpdateById, '/api/specification/update/<id>')
 api.add_resource(SpecificationAddRequirementResource, '/api/specification/<id>/requirement')

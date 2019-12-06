@@ -7,6 +7,7 @@ from models.session import Session
 from models.specification_requirement import SpecificationRequirement
 
 
+
 class TaskResource(Resource):
 
     def get(self, id):
@@ -27,3 +28,5 @@ class TaskResource(Resource):
             result = {'id': id, 'requirements': result_req}
 
         return {'content': result}
+
+

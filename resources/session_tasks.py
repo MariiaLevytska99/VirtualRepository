@@ -20,12 +20,23 @@ class SessionTaskResource(Resource):
             )
         return {'content': result}
 
-    def put(self):
-        task = SessionTask()
+    def post(self, sessionId):
         payload = request.get_json(force=True)
-        task.session_id = payload.get('session_id')
-        task.requirement_id = payload.get('requirement_id')
-        task.requirement_type_answer = payload.get('answer')
+        unselectedRequiremenets = payload.get('requirementsUnselected')
+        selectedRequirements = payload.get('requirements')
+        for unselect in unselectedRequiremenets:
+            print(unselect.get('id'))
+            SessionTaskResource.putReq(self, sessionId, unselect.get('id'), None)
 
+        for select in selectedRequirements:
+            for req in select.get('requirements'):
+                SessionTaskResource.putReq(self, sessionId, req.get('id'), select.get('value'),)
+
+
+    def putReq(self, sessionId, reqId, answerId):
+        task = SessionTask()
+        task.session_id = sessionId
+        task.requirement_id = reqId
+        task.requirement_type_answer = answerId
         db.session.add(task)
         db.session.commit()
