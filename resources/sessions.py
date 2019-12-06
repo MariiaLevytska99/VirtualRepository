@@ -9,6 +9,7 @@ from models.session import Session
 from models.session_task import SessionTask
 from models.requirement import Requirement
 from models.specification_requirement import SpecificationRequirement
+from resources.account_specifications import AttemptResource
 
 
 class SessionResource(Resource):
@@ -60,3 +61,16 @@ class SessionUpdateScoreResource(Resource):
 
         update_session.score = int(n / m * 100)
         db.session.commit()
+
+class SessionBridgeResource(Resource):
+
+    def put(self, specificationId):
+        payload = request.get_json(force=True)
+        new_session = Session()
+        new_session.start = datetime.datetime.utcnow()
+        new_session.specification_id = specificationId
+        new_session.completed = False
+        new_session.score = 0
+        db.session.add(new_session)
+        db.session.commit()
+        return {'content': new_session.session_id}

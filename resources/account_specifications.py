@@ -38,7 +38,13 @@ class AccountSpecificationResource(Resource):
 
 class AttemptResource(Resource):
     def get(self, accountId, specificationId):
-        attempts = AccountSpecification.query.filter(AccountSpecification.specification_id == specificationId).filter(AccountSpecification.account_id == accountId).first().attempts
+        attempts = AccountSpecification.query.filter(AccountSpecification.specification_id == specificationId).filter(\
+            AccountSpecification.account_id == accountId).first().attempts
         return attempts
 
+    def post(self, accountId, specificationId):
+        update_attempts = AccountSpecification.query.filter(AccountSpecification.specification_id == specificationId).filter(\
+            AccountSpecification.account_id == accountId).first()
+        update_attempts.attempts = update_attempts.attempts - 1
+        db.session.commit()
 

@@ -19,7 +19,7 @@ from resources.specifications import SpecificationResource
 from resources.specification_requirements import SpecificationRequirementResource
 from resources.sessions import SessionResource
 from resources.sessions import SessionUpdateScoreResource
-from resources.accounts_sessions import AccounSessionsResource
+from resources.accounts_sessions import AccountSessionsResource
 from resources.session_tasks import SessionTaskResource
 from resources.specifications import SpecificationDeleteById
 from resources.specifications import SpecificationUpdateById
@@ -39,7 +39,6 @@ api.add_resource(AccountSpecificationResource, '/api/account/<id>/specification'
 api.add_resource(SpecificationRequirementResource, '/api/specification/<id>/requirements')
 api.add_resource(SessionResource, '/api/sessions')
 api.add_resource(TaskResource, '/api/session/<id>/task')
-api.add_resource(AccounSessionsResource, '/api/account_session')
 api.add_resource(SessionTaskResource, '/api/session_tasks')
 api.add_resource(SpecificationDeleteById, '/api/specification/<id>')
 api.add_resource(SpecificationUpdateById, '/api/specification/update/<id>')
@@ -48,8 +47,8 @@ api.add_resource(SpecificationDeleteRequirementResource, '/api/specification/<sp
 api.add_resource(SpecificationUpdateRequirementResource, '/api/specification/<specificationId>/requirement/<id>')
 api.add_resource(BestScoreResource, '/api/accounts/<accountId>/bestscore/<specificationId>')
 api.add_resource(SessionUpdateScoreResource, '/api/sessions/score/<sessionId>')
-
 api.add_resource(SpecificationDetails, '/api/specifications/<specificationId>/account/<accountId>')
+api.add_resource(AccountSessionsResource, '/api/session/specifications/<specificationId>/account/<accountId>')
 # somehow make it secure using /current and id from token
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
