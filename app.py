@@ -29,6 +29,7 @@ from resources.specification_requirements import SpecificationUpdateRequirementR
 from resources.account_specifications import AccountSpecificationResource
 from resources.best_score import BestScoreResource
 from resources.tasks import TaskResource
+from resources.specifications import SpecificationDetails
 
 api.add_resource(AccountsResource, '/api/accounts')
 api.add_resource(RequirementTypeResource, '/api/requirement/type')
@@ -48,6 +49,7 @@ api.add_resource(SpecificationUpdateRequirementResource, '/api/specification/<sp
 api.add_resource(BestScoreResource, '/api/accounts/<accountId>/bestscore/<specificationId>')
 api.add_resource(SessionUpdateScoreResource, '/api/sessions/score/<sessionId>')
 
+api.add_resource(SpecificationDetails, '/api/specifications/<specificationId>/account/<accountId>')
 # somehow make it secure using /current and id from token
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

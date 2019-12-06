@@ -26,9 +26,10 @@ class BestScoreResource(Resource):
                             JOIN specification spec on s.specification_id = spec.specification_id 
                             where a.account_id = :accountId and spec.specification_id = :specificationId"""
         content = db.session.execute(query,  {'accountId': accountId, 'specificationId': specificationId}).fetchone()
-        print("CONTENT", content)
-        # json_data = json.dumps(content, ensure_ascii=False, default=str)
-        # return json_data
-        return {'content': content}
+        res = []
+        res.append({
+            'score': float(content[0])
+        })
+        return {'content': float(content[0])}
 
 

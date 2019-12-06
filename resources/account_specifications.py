@@ -36,6 +36,9 @@ class AccountSpecificationResource(Resource):
             self.putAttempts(specification.specification_id, accountId)
 
 
-
+class AttemptResource(Resource):
+    def get(self, accountId, specificationId):
+        attempts = AccountSpecification.query.filter(AccountSpecification.specification_id == specificationId).filter(AccountSpecification.account_id == accountId).first().attempts
+        return attempts
 
 

@@ -4,6 +4,8 @@ from db import db
 
 from models.specification import Specification
 from models.account_specification import AccountSpecification
+from resources.best_score import BestScoreResource
+from resources.account_specifications import AttemptResource
 
 class SpecificationResource(Resource):
 
@@ -43,16 +45,19 @@ class SpecificationUpdateById(Resource):
         update_specification.specification_description = payload.get('description')
         db.session.commit()
 
+class SpecificationDetails(Resource):
 
-    def get(self, id):
-        specification = Specification.query().filter(Specification.specification_id == id).first()
-        attempts = AccountSpecification.query().filter(AccountSpecification.specification_id == id).first().attempts
-        result = {
-                'id': specification.specification_id,
-                'name': specification.specification_name,
-                'description': specification.specification_description,
-                'attempts': attempts,
-                'score': 0
-            }
-        return {'content': result}
+     def get(self, specificationId, accountId):
+         specification = Specification.query.filter(Specification.specification_id == specificationId).first()
+         score = BestScoreResource.get(self, accountId, specificationId).get('content')
+         attempts = AttemptResource.get(self, accountId, specificationId)
+         print('ATTEMPTS', attempts)
+         result = {
+             'id': specification.specification_id,
+             'name': specification.specification_name,
+             'description': specification.specification_description,
+             'attempts': attempts,
+             'score': score
+         }
+         return {'content': result}
 
