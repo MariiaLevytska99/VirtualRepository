@@ -13,30 +13,22 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from config import Config
 import json
+from decimal import Decimal
+from flask import jsonify
 
 
 class BestScoreResource(Resource):
 
     def get(self, accountId, specificationId):
-        # account_sessions = db.session.query(AccountSession.account_session__id)\
-        #     .filter(AccountSession.account_id == accountId)
-        # print(account_sessions.all())
-        # sessions = db.session.query(Session.score).filter(Session.session_id in account_sessions)\
-        #     .filter(Session.specification_id == specificationId)
-        # print(sessions)
-        # result = 0
-
-        engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
-        session = Session(engine)
-
-        query = """SELECT s.score as Score FROM session s
+        query = """SELECT MAX(s.score) FROM session s
                             JOIN account_session asS on s.session_id = asS.session_id 
                             JOIN account a on asS.account_id = a.account_id 
                             JOIN specification spec on s.specification_id = spec.specification_id 
                             where a.account_id = :accountId and spec.specification_id = :specificationId"""
-        content = db.session.execute(query,  {'accountId': accountId, 'specificationId': specificationId}).fetchall()
+        content = db.session.execute(query,  {'accountId': accountId, 'specificationId': specificationId}).fetchone()
+        print("CONTENT", content)
+        # json_data = json.dumps(content, ensure_ascii=False, default=str)
+        # return json_data
+        return {'content': content}
 
-        return {
-            'content': content
-        }
 
