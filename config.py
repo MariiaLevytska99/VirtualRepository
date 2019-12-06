@@ -30,3 +30,4 @@ class Config(object):
 
     SQLALCHEMY_ECHO = True
     SECRET_KEY = 'soully'
+

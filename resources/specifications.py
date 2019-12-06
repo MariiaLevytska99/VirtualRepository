@@ -20,19 +20,6 @@ class SpecificationResource(Resource):
             )
         return {'content': result}
 
-    def get(self, id):
-        specification = Specification.query().filter(Specification.specification_id == id).first()
-        attempts = AccountSpecification.query().filter(AccountSpecification.specification_id == id).first().attempts
-        result = {
-                'id': specification.specification_id,
-                'name': specification.specification_name,
-                'description': specification.specification_description,
-                'attempts': attempts,
-                'score': 0
-            }
-        return {'content': result}
-
-
     def put(self):
         payload = request.get_json(force=True)
         new_specification = Specification(payload.get('name'), payload.get('description'))
@@ -57,5 +44,15 @@ class SpecificationUpdateById(Resource):
         db.session.commit()
 
 
-
+    def get(self, id):
+        specification = Specification.query().filter(Specification.specification_id == id).first()
+        attempts = AccountSpecification.query().filter(AccountSpecification.specification_id == id).first().attempts
+        result = {
+                'id': specification.specification_id,
+                'name': specification.specification_name,
+                'description': specification.specification_description,
+                'attempts': attempts,
+                'score': 0
+            }
+        return {'content': result}
 

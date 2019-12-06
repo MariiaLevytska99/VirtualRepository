@@ -18,6 +18,7 @@ from resources.requirements import RequirementResource
 from resources.specifications import SpecificationResource
 from resources.specification_requirements import SpecificationRequirementResource
 from resources.sessions import SessionResource
+from resources.sessions import SessionUpdateScoreResource
 from resources.accounts_sessions import AccounSessionsResource
 from resources.session_tasks import SessionTaskResource
 from resources.specifications import SpecificationDeleteById
@@ -26,6 +27,7 @@ from resources.specification_requirements import SpecificationAddRequirementReso
 from resources.specification_requirements import SpecificationDeleteRequirementResource
 from resources.specification_requirements import SpecificationUpdateRequirementResource
 from resources.account_specifications import AccountSpecificationResource
+from resources.best_score import BestScoreResource
 from resources.tasks import TaskResource
 
 api.add_resource(AccountsResource, '/api/accounts')
@@ -43,11 +45,9 @@ api.add_resource(SpecificationUpdateById, '/api/specification/update/<id>')
 api.add_resource(SpecificationAddRequirementResource, '/api/specification/<id>/requirement')
 api.add_resource(SpecificationDeleteRequirementResource, '/api/specification/<specificationId>/requirement/<id>')
 api.add_resource(SpecificationUpdateRequirementResource, '/api/specification/<specificationId>/requirement/<id>')
+api.add_resource(BestScoreResource, '/api/accounts/<accountId>/bestscore/<specificationId>')
+api.add_resource(SessionUpdateScoreResource, '/api/sessions/score/<sessionId>')
 
 # somehow make it secure using /current and id from token
 if __name__ == '__main__':
-    app.run(debug=True, port=5000);
-
-
-@app.route('/')
-@app.route('/api/accounts', methods=['GET', 'PUT', 'POST'])
+    app.run(debug=True, port=5000)
