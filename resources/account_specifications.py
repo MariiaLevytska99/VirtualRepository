@@ -1,9 +1,10 @@
 from flask_restful import Resource
-from flask import request
 from db import db
 
 from models.account_specification import AccountSpecification
 from models.specification import Specification
+from models.session import Session
+from models.account_session import AccountSession
 
 class AccountSpecificationResource(Resource):
 
@@ -46,4 +47,13 @@ class AttemptResource(Resource):
         update_attempts = AccountSpecification.query.filter(AccountSpecification.specification_id == specificationId).filter(\
             AccountSpecification.account_id == accountId).first()
         update_attempts.attempts = update_attempts.attempts - 1
+        db.session.commit()
+
+class CancelTaskResource(Resource):
+    def post(self, sessionId):
+        specification_id = Session.query.filter(Session.session_id == sessionId).first().specification_id
+        account_id = AccountSession.query.filter(AccountSession.session_id == sessionId).first().account_id
+        update_attempts = AccountSpecification.query.filter(AccountSpecification.specification_id == specification_Id).filter(\
+            AccountSpecification.account_id == account_id).first()
+        update_attempts.attempts = update_attempts.attempts + 1
         db.session.commit()
