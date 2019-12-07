@@ -25,9 +25,10 @@ class AccountSessionsResource(Resource):
         account_session = AccountSession()
         account_session.session_id = SessionBridgeResource.put(self, specificationId)
         account_session.account_id = accountId
+        db.session.add(account_session)
         db.session.commit()
         AttemptResource.post(self, accountId, specificationId)
-        return  account_session.session_id
+        return  {'content': account_session.session_id}
 
 
 

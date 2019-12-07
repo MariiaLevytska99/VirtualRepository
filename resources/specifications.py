@@ -6,6 +6,8 @@ from models.specification import Specification
 from models.account_specification import AccountSpecification
 from resources.best_score import BestScoreResource
 from resources.account_specifications import AttemptResource
+from models.account_session import AccountSession
+from models.session import Session
 
 class SpecificationResource(Resource):
 
@@ -51,7 +53,6 @@ class SpecificationDetails(Resource):
          specification = Specification.query.filter(Specification.specification_id == specificationId).first()
          score = BestScoreResource.get(self, accountId, specificationId).get('content')
          attempts = AttemptResource.get(self, accountId, specificationId)
-         print('ATTEMPTS', attempts)
          result = {
              'id': specification.specification_id,
              'name': specification.specification_name,
@@ -61,3 +62,10 @@ class SpecificationDetails(Resource):
          }
          return {'content': result}
 
+class SpecificationDetailsBySesionResource(Resource):
+
+    def get(self, sessionId):
+        specification_id = Session.query.filter(Session.session_id == sessionId).first().specification_id
+        account = AccountSession.query.filter(AccountSession.session_id == sessionId).first().account_id
+
+        return {'content': SpecificationDetails.get(self, specification_id, account) }

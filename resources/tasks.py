@@ -11,7 +11,7 @@ from models.specification_requirement import SpecificationRequirement
 class TaskResource(Resource):
 
     def get(self, id):
-        specification = db.session.query(Session).filter(Session.session_id == id).first().specification_id;
+        specification = Session.query.filter(Session.session_id == id).first().specification_id;
         numberfCorrectRequirements = random.randint(10, 15)
         numberOfIncorrectRequirements = 15 - numberfCorrectRequirements
         correctRequirements = random.choices(db.session.query(SpecificationRequirement).filter(SpecificationRequirement.specification_id == specification).all(), k=numberfCorrectRequirements)

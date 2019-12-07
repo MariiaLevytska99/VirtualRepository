@@ -31,6 +31,7 @@ from resources.account_specifications import AccountSpecificationResource
 from resources.best_score import BestScoreResource
 from resources.tasks import TaskResource
 from resources.specifications import SpecificationDetails
+from resources.specifications import SpecificationDetailsBySesionResource
 
 api.add_resource(AccountsResource, '/api/accounts')
 api.add_resource(RequirementTypeResource, '/api/requirement/type')
@@ -51,6 +52,7 @@ api.add_resource(SessionUpdateScoreResource, '/api/sessions/score/<sessionId>')
 api.add_resource(SpecificationDetails, '/api/specifications/<specificationId>/account/<accountId>')
 api.add_resource(AccountSessionsResource, '/api/session/specifications/<specificationId>/account/<accountId>')
 api.add_resource(SessionGetResultResource, '/api/session/<sessionId>/result')
+api.add_resource(SpecificationDetailsBySesionResource, '/api/session/<sessionId>/specification')
 # somehow make it secure using /current and id from token
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

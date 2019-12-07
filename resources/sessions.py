@@ -73,7 +73,7 @@ class SessionBridgeResource(Resource):
         new_session.score = 0
         db.session.add(new_session)
         db.session.commit()
-        return {'content': new_session.session_id}
+        return new_session.session_id
 
 class SessionGetResultResource(Resource):
 
