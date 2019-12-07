@@ -30,5 +30,3 @@ class AccountSessionsResource(Resource):
         AttemptResource.post(self, accountId, specificationId)
         return  {'content': account_session.session_id}
 
-
-
