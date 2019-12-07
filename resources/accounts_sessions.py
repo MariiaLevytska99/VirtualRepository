@@ -29,5 +29,3 @@ class AccountSessionsResource(Resource):
         AttemptResource.post(self, accountId, specificationId)
         return  account_session.session_id
 
-
-

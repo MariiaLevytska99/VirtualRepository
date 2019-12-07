@@ -47,4 +47,3 @@ class AttemptResource(Resource):
             AccountSpecification.account_id == accountId).first()
         update_attempts.attempts = update_attempts.attempts - 1
         db.session.commit()
-
