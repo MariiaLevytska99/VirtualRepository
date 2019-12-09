@@ -32,12 +32,11 @@ class SpecificationResource(Resource):
         db.session.commit()
 
 
-
-
 class SpecificationDeleteById(Resource):
     def delete(self, id):
         db.session.query(Specification).filter(Specification.specification_id == id).delete()
         db.session.commit()
+
 
 class SpecificationUpdateById(Resource):
     def post(self, id):
@@ -47,8 +46,8 @@ class SpecificationUpdateById(Resource):
         update_specification.specification_description = payload.get('description')
         db.session.commit()
 
-class SpecificationDetails(Resource):
 
+class SpecificationDetails(Resource):
      def get(self, specificationId, accountId):
          specification = Specification.query.filter(Specification.specification_id == specificationId).first()
          score = BestScoreResource.get(self, accountId, specificationId).get('content')
