@@ -61,10 +61,22 @@ class SpecificationDetails(Resource):
          }
          return {'content': result}
 
+
 class SpecificationDetailsBySesionResource(Resource):
 
     def get(self, sessionId):
         specification_id = Session.query.filter(Session.session_id == sessionId).first().specification_id
         account = AccountSession.query.filter(AccountSession.session_id == sessionId).first().account_id
 
-        return {'content': SpecificationDetails.get(self, specification_id, account) }
+        specification = Specification.query.filter(Specification.specification_id == specification_id).first()
+        score = BestScoreResource.get(self, account, specification_id).get('content')
+        attempts = AttemptResource.get(self, account, specification_id)
+        result = {
+            'id': specification.specification_id,
+            'name': specification.specification_name,
+            'description': specification.specification_description,
+            'attempts': attempts,
+            'score': score
+        }
+
+        return {'content': result}
