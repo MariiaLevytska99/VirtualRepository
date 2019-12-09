@@ -35,6 +35,7 @@ class PasswordManager():
             server.sendmail(sender_email, receiver_email, message)
             return rand
 
+
 class AccountsResource(Resource):
     def putAttempts(self, specification_id, account_id):
         account_specification_new = AccountSpecification()
@@ -74,7 +75,9 @@ class AccountsResource(Resource):
             for account in accounts:
                 if payload.get('username') == account.username:
                     if payload.get('password') == account.password:
-                        return {}, 200
+                        return {'id': account.account_id,
+                                'username': account.username,
+                                'token': 'fake-jwt-token'}, 200
 
         return {}, 400
 
