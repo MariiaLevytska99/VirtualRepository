@@ -98,12 +98,14 @@ class SessionGetResultResource(Resource):
         session.completed = (n >= passingPoints)
         session.end = datetime.datetime.utcnow()
         db.session.commit()
+        duration = session.end - session.start;
 
         result = {
             'score': float(n),
             'passed': n >= passingPoints,
             'passingScore': float(passingPoints),
-            'percentage': float(session.score)
+            'percentage': float(session.score),
+            'time': float(duration)
         }
 
         return {'content': result}
