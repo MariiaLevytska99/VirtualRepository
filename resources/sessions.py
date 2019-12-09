@@ -75,6 +75,7 @@ class SessionBridgeResource(Resource):
         db.session.commit()
         return new_session.session_id
 
+
 class SessionGetResultResource(Resource):
 
     def get(self, sessionId):
@@ -105,7 +106,7 @@ class SessionGetResultResource(Resource):
             'passed': n >= passingPoints,
             'passingScore': float(passingPoints),
             'percentage': float(session.score),
-            'time': float(duration)
+            'time': str(duration)
         }
 
         return {'content': result}
