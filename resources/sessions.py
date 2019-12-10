@@ -12,6 +12,7 @@ from models.specification_requirement import SpecificationRequirement
 from resources.account_specifications import AttemptResource
 from decimal import Decimal
 
+
 class SessionResource(Resource):
 
     def get(self):
@@ -62,6 +63,7 @@ class SessionUpdateScoreResource(Resource):
         update_session.score = int(n / m * 100)
         db.session.commit()
 
+
 class SessionBridgeResource(Resource):
 
     def put(self, specificationId):
@@ -99,7 +101,7 @@ class SessionGetResultResource(Resource):
         session.completed = (n >= passingPoints)
         session.end = datetime.datetime.utcnow()
         db.session.commit()
-        duration = session.end - session.start;
+        duration = session.end - session.start
 
         result = {
             'score': float(n),

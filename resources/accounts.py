@@ -2,6 +2,10 @@ import smtplib
 import ssl
 import random
 import string
+import os
+import hashlib
+import binascii
+import datetime
 
 from flask import request
 from flask_restful import Resource
@@ -10,6 +14,8 @@ from db import db
 from models.account import Account
 from models.account_specification import AccountSpecification
 from models.specification import Specification
+from models.account_session import AccountSession
+from models.session import Session
 
 
 class PasswordManager():
@@ -34,6 +40,27 @@ class PasswordManager():
             server.login(sender_email, password)
             server.sendmail(sender_email, receiver_email, message)
             return rand
+
+    @staticmethod
+    def hash_password(password):
+        """Hash a password for storing."""
+        salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
+        pwdhash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'),
+                                      salt, 100000)
+        pwdhash = binascii.hexlify(pwdhash)
+        return (salt + pwdhash).decode('ascii')
+
+    @staticmethod
+    def verify_password(stored_password, provided_password):
+        """Verify a stored password against one provided by user"""
+        salt = stored_password[:64]
+        stored_password = stored_password[64:]
+        pwdhash = hashlib.pbkdf2_hmac('sha512',
+                                      provided_password.encode('utf-8'),
+                                      salt.encode('ascii'),
+                                      100000)
+        pwdhash = binascii.hexlify(pwdhash).decode('ascii')
+        return pwdhash == stored_password
 
 
 class AccountsResource(Resource):
@@ -74,9 +101,10 @@ class AccountsResource(Resource):
         else:
             for account in accounts:
                 if payload.get('username') == account.username:
-                    if payload.get('password') == account.password:
+                    if PasswordManager.verify_password(account.password, payload.get('password')):
                         return {'id': account.account_id,
                                 'username': account.username,
+                                'email': account.email,
                                 'token': 'fake-jwt-token'}, 200
 
         return {}, 400
@@ -84,9 +112,12 @@ class AccountsResource(Resource):
     def put(self):
         payload = request.get_json(force=True)
         accounts = Account.query.all()
+
+        hashed_password = PasswordManager.hash_password(payload.get('password'))
+
         if payload is None:
             payload = {}
-        new_account = Account(email=payload.get('email'), username=payload.get('login'), password=payload.get('password'))
+        new_account = Account(email=payload.get('email'), username=payload.get('login'), password=hashed_password)
 
         for account in accounts:
             if new_account.username == account.username:
@@ -121,7 +152,7 @@ class AccountsResource(Resource):
         return {'content': result}, 200
 
 
-class AccountDeleteById(Resource):
+class AccountById(Resource):
     def delete(self, user_id):
         # payload = request.get_json(force=True)
         # db.session.query(Account).filter(Account.account_id == payload.get('userId')).delete()
@@ -138,3 +169,30 @@ class AccountDeleteById(Resource):
                 'email': account.email
             })
         return {'content': result}, 200
+
+    def get(self, accountId):
+        account = Account.query.filter(Account.account_id == accountId).first()
+        tests = len(AccountSession.query.filter(AccountSession.account_id == accountId).all())
+        themes = len(AccountSpecification.query.filter(AccountSpecification.account_id == accountId)\
+                     .filter(AccountSpecification.attempts < 3).all())
+        ac_sessions = AccountSession.query.filter(AccountSession.account_id == accountId).all()
+        time = datetime.datetime.now() - datetime.datetime.now()
+        sessions = Session.query.all()
+        for ac_session in ac_sessions:
+            for session in sessions:
+                if session.session_id == ac_session.session_id:
+                    time_delta = session.end - session.start
+                    time = time + time_delta
+
+        s = str(time)
+        time_spent = s[:-4  ]
+
+        result = {
+            'username': account.username,
+            'email': account.email,
+            'tests': tests,
+            'themes': themes,
+            'time': time_spent
+        }
+        return result
+

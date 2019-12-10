@@ -33,8 +33,12 @@ from resources.tasks import TaskResource
 from resources.specifications import SpecificationDetails
 from resources.specifications import SpecificationDetailsBySesionResource
 from resources.account_specifications import CancelTaskResource
+from resources.accounts import AccountById
 
 api.add_resource(AccountsResource, '/api/accounts')
+
+api.add_resource(AccountById, '/api/accounts/<accountId>/details')
+
 api.add_resource(RequirementTypeResource, '/api/requirement/type')
 api.add_resource(RequirementResource, '/api/requirements')
 api.add_resource(SpecificationResource, '/api/specifications')
