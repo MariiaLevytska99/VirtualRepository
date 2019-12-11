@@ -219,4 +219,5 @@ class StatisticResource(Resource):
             'dataY': scores,
             'data': points
         }
+
         return result
