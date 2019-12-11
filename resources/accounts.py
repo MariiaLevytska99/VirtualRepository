@@ -201,23 +201,16 @@ class StatisticResource(Resource):
         sessions = Session.query.all()
         labels = []
         scores = []
-        points= []
-        start = 0
-
 
         for ac_session in ac_sessions:
             for session in sessions:
                 if session.session_id == ac_session.session_id:
                     labels.append(session.specification.specification_name)
                     scores.append(BestScoreResource.get(self, accountId, session.specification_id).get('content'))
-                    start += 10
-                    points.append(start)
 
         result = {
             'labels': labels,
-            'dataY': scores,
-            'data': points
+            'data': scores
         }
 
         return result
-
