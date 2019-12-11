@@ -86,15 +86,12 @@ class SessionGetResultResource(Resource):
         n = 0
         m = 0
         for session_task in session_tasks:
-            print('1', session_task)
             m += 1
             requirement = Requirement.query.filter(Requirement.requirement_id == session_task.requirement_id).first()
             if requirement.type_id == session_task.requirement_type_answer:
-                print('2')
-                n += 1
+                n += 5
             elif session_task.requirement_type_answer is not None:
-                print('3')
-                m += 2
+                m += 0.5
         passingPoints = (int)(m * 0.75)
 
         session.score = n

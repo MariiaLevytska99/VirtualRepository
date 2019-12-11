@@ -16,6 +16,7 @@ from models.account_specification import AccountSpecification
 from models.specification import Specification
 from models.account_session import AccountSession
 from models.session import Session
+from resources.best_score import BestScoreResource
 
 
 class PasswordManager():
@@ -135,8 +136,6 @@ class AccountsResource(Resource):
         return {}, 200
 
     def delete(self, user_id):
-        #payload = request.get_json(force=True)
-        #db.session.query(Account).filter(Account.account_id == payload.get('userId')).delete()
         db.session.query(Account).filter(Account.account_id == user_id).delete()
         db.session.commit()
 
@@ -154,8 +153,6 @@ class AccountsResource(Resource):
 
 class AccountById(Resource):
     def delete(self, user_id):
-        # payload = request.get_json(force=True)
-        # db.session.query(Account).filter(Account.account_id == payload.get('userId')).delete()
         db.session.query(Account).filter(Account.account_id == user_id).delete()
         db.session.commit()
 
@@ -173,7 +170,7 @@ class AccountById(Resource):
     def get(self, accountId):
         account = Account.query.filter(Account.account_id == accountId).first()
         tests = len(AccountSession.query.filter(AccountSession.account_id == accountId).all())
-        themes = len(AccountSpecification.query.filter(AccountSpecification.account_id == accountId)\
+        themes = len(AccountSpecification.query.filter(AccountSpecification.account_id == accountId) \
                      .filter(AccountSpecification.attempts < 3).all())
         ac_sessions = AccountSession.query.filter(AccountSession.account_id == accountId).all()
         time = datetime.datetime.now() - datetime.datetime.now()
@@ -185,7 +182,7 @@ class AccountById(Resource):
                     time = time + time_delta
 
         s = str(time)
-        time_spent = s[:-4  ]
+        time_spent = s
 
         result = {
             'username': account.username,
@@ -196,3 +193,30 @@ class AccountById(Resource):
         }
         return result
 
+
+class StatisticResource(Resource):
+
+    def get(self, accountId):
+        ac_sessions = AccountSession.query.filter(AccountSession.account_id == accountId).all()
+        sessions = Session.query.all()
+        labels = []
+        scores = []
+        points= []
+        start = 0
+
+
+        for ac_session in ac_sessions:
+            score = [0]
+            for session in sessions:
+                if session.session_id == ac_session.session_id:
+                    labels.append(session.specification.specification_name)
+                    scores.append(BestScoreResource.get(self, accountId, session.specification_id).get('content'))
+                    start += 10
+                    points.append(start)
+
+        result = {
+            'labels': labels,
+            'dataY': scores,
+            'data': points
+        }
+        return result

@@ -34,6 +34,7 @@ from resources.specifications import SpecificationDetails
 from resources.specifications import SpecificationDetailsBySesionResource
 from resources.account_specifications import CancelTaskResource
 from resources.accounts import AccountById
+from resources.accounts import StatisticResource
 
 api.add_resource(AccountsResource, '/api/accounts')
 
@@ -59,6 +60,8 @@ api.add_resource(AccountSessionsResource, '/api/session/specifications/<specific
 api.add_resource(SessionGetResultResource, '/api/session/<sessionId>/result')
 api.add_resource(SpecificationDetailsBySesionResource, '/api/session/<sessionId>/specification')
 api.add_resource(CancelTaskResource, '/api/session/<sessionId>/cancel')
+api.add_resource(StatisticResource,  '/api/accounts/<accountId>/statistics')
+
 # somehow make it secure using /current and id from token
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
