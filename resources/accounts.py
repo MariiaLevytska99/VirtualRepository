@@ -96,7 +96,7 @@ class AccountsResource(Resource):
                     psw_man = PasswordManager()
                     pas = ""
                     pas += psw_man.send(account.email)
-                    db.session.query(Account).filter(Account.email == account.email).update(dict(password=pas))
+                    db.session.query(Account).filter(Account.email == account.email).update(dict(password=PasswordManager.hash_password(pas)))
                     db.session.commit()
                     return {}, 200
         else:
