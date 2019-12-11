@@ -206,7 +206,6 @@ class StatisticResource(Resource):
 
 
         for ac_session in ac_sessions:
-            score = [0]
             for session in sessions:
                 if session.session_id == ac_session.session_id:
                     labels.append(session.specification.specification_name)
