@@ -182,7 +182,7 @@ class AccountById(Resource):
                     time = time + time_delta
 
         s = str(time)
-        time_spent = s[:-4]
+        time_spent = s[:-7]
 
         result = {
             'username': account.username,
