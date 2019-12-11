@@ -6,6 +6,7 @@ import os
 import hashlib
 import binascii
 import datetime
+from datetime import timedelta
 
 from flask import request
 from flask_restful import Resource
@@ -28,18 +29,21 @@ class PasswordManager():
         smtp_server = "smtp.gmail.com"
         sender_email = "virtual.laboratory.restore"
         password = "newpassword12345"
-        message = """New password """
+        message = """ Hello. Your new password is """
 
+        theme = "RESET PASSWORD"
         pm = PasswordManager()
         rand = pm.randomString()
         message += rand
+        message += """.\nIf you have any problems please contact us :)"""
+        message2 = 'Subject: {}\n\n{}'.format(theme, message)
         context = ssl.create_default_context()
         with smtplib.SMTP(smtp_server, port) as server:
             server.ehlo()  # Can be omitted
             server.starttls(context=context)
             server.ehlo()  # Can be omitted
             server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, message)
+            server.sendmail(sender_email, receiver_email, message2)
             return rand
 
     @staticmethod
@@ -173,7 +177,8 @@ class AccountById(Resource):
         themes = len(AccountSpecification.query.filter(AccountSpecification.account_id == accountId) \
                      .filter(AccountSpecification.attempts < 3).all())
         ac_sessions = AccountSession.query.filter(AccountSession.account_id == accountId).all()
-        time = datetime.datetime.now() - datetime.datetime.now()
+        time = timedelta(0, 0, 1)
+        #time = timedelta(seconds=1)
         sessions = Session.query.all()
         for ac_session in ac_sessions:
             for session in sessions:

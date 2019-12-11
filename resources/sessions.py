@@ -35,6 +35,7 @@ class SessionResource(Resource):
         payload = request.get_json(force=True)
         new_session = Session()
         new_session.start = datetime.datetime.utcnow()
+        new_session.end = new_session.start
         new_session.specification_id = payload.get('specification')
         new_session.completed = False
         new_session.score = 0
