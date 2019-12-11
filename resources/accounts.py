@@ -220,3 +220,4 @@ class StatisticResource(Resource):
         }
 
         return result
+
